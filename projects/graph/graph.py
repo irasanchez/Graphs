@@ -100,21 +100,33 @@ class Graph:
         # create a queue
         scheduled = Queue()
         # add the starting node to said queue
-        scheduled.enqueue(starting_vertex)
+        # for the search, put it inside a list in order to keep track of the path
+        scheduled.enqueue([starting_vertex])
         # use a set for breadcrumbs
         visited = set()
         # while there are still vertices scheduled to be visited
         while scheduled.size() > 0:
-            # remove the first item, since you're visiting it right now
-            current_vertex = scheduled.dequeue()
+            # get the current vertex by getting its path and referencing it from the end of the path
+            path = scheduled.dequeue()
+            current_vertex = path[-1]
             # if we have not visited this one yet
             if current_vertex not in visited:
-                print(current_vertex)
+                # check if the current one is the destination
+                if current_vertex == destination_vertex:
+                    # if it is, return the path to how you got there
+                    return path
+                # keep going otherwise
                 visited.add(current_vertex)
                 # go through the neighbors
                 for next_vertex in self.get_neighbors(current_vertex):
-                    # schedule the node to visit it later
-                    scheduled.enqueue(next_vertex)
+                    # schedule the node to visit it later and include it in the path
+                    # just doing path.append(next_vertex) will cause bug by changing the original path variable
+                    # scheduled will end up with copies full of the same thing
+                    # lists get passed by reference, so we need to make an explicit copy
+                    path_copy = list(path)
+                    path_copy.append(next_vertex)
+                    # add the new path to the list of possibilities in the scheduled stack
+                    scheduled.enqueue(path_copy)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
