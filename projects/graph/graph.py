@@ -15,15 +15,17 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        self.vertices[f'{vertex_id}'] = set()
+        self.vertices[vertex_id] = set()
 
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph.
         """
         try:
+            # will throw error if v2 key not in vertices
             check = self.vertices[v2]
             self.vertices[v1].add(v2)  # this add method comes with sets
+            print(self.vertices[v1])
         except KeyError:
             print(f'There is no "{v2}" vertex')
 
@@ -38,7 +40,13 @@ class Graph:
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        # make a queue
+        scheduled = Queue()
+        # add starting_vertex to queue to mark it as being visited
+        print(starting_vertex)
+        scheduled.enqueue(starting_vertex)
+        # check if any vertices need to be scheduled:
+        # while len(scheduled) > 1:
 
     def dft(self, starting_vertex):
         """
@@ -81,20 +89,6 @@ class Graph:
         This should be done using recursion.
         """
         pass  # TODO
-
-
-graph = Graph()  # Instantiate your graph
-graph.add_vertex('0')
-graph.add_vertex('1')
-graph.add_vertex('2')
-graph.add_vertex('3')
-graph.add_edge('0', '1')
-graph.add_edge('1', '0')
-graph.add_edge('0', '3')
-graph.add_edge('3', '0')
-print(graph.vertices)
-
-graph.add_edge('0', '4')
 
 
 # if __name__ == '__main__':
@@ -164,3 +158,25 @@ graph.add_edge('0', '4')
 #     '''
 #     print(graph.dfs(1, 6))
 #     print(graph.dfs_recursive(1, 6))
+
+graph = Graph()
+graph.add_vertex(1)
+graph.add_vertex(2)
+graph.add_vertex(3)
+graph.add_vertex(4)
+graph.add_vertex(5)
+graph.add_vertex(6)
+graph.add_vertex(7)
+print(graph.vertices)
+graph.add_edge(5, 3)
+graph.add_edge(6, 3)
+graph.add_edge(7, 1)
+graph.add_edge(4, 7)
+graph.add_edge(1, 2)
+graph.add_edge(7, 6)
+graph.add_edge(2, 4)
+graph.add_edge(2, 14)
+graph.add_edge(3, 5)
+graph.add_edge(2, 3)
+graph.add_edge(4, 6)
+print(graph.vertices)
