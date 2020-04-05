@@ -63,9 +63,9 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        # create a queue
+        # create a stack
         scheduled = Stack()
-        # add the starting node to said queue
+        # add the starting node to said stack
         scheduled.push(starting_vertex)
         # use a set for breadcrumbs
         visited = set()
@@ -97,7 +97,24 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        # create a queue
+        scheduled = Queue()
+        # add the starting node to said queue
+        scheduled.enqueue(starting_vertex)
+        # use a set for breadcrumbs
+        visited = set()
+        # while there are still vertices scheduled to be visited
+        while scheduled.size() > 0:
+            # remove the first item, since you're visiting it right now
+            current_vertex = scheduled.dequeue()
+            # if we have not visited this one yet
+            if current_vertex not in visited:
+                print(current_vertex)
+                visited.add(current_vertex)
+                # go through the neighbors
+                for next_vertex in self.get_neighbors(current_vertex):
+                    # schedule the node to visit it later
+                    scheduled.enqueue(next_vertex)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -105,7 +122,34 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        # create a stack
+        scheduled = Stack()
+        # add the starting node to said stack
+        # for the search, put it inside a list in order to keep track of the path
+        scheduled.push([starting_vertex])
+        # use a set for breadcrumbs
+        visited = set()
+        # while there are still vertices scheduled to be visited
+        while scheduled.size() > 0:
+            # get the current vertex by getting its path and referencing it from the end of the path
+            path = scheduled.pop()
+            current_vertex = path[-1]
+            # if we have not visited this one yet
+            if current_vertex not in visited:
+                # check if the current one is the destination
+                if current_vertex == destination_vertex:
+                    return path
+                visited.add(current_vertex)
+                # go through the neighbors
+                for next_vertex in self.get_neighbors(current_vertex):
+                    # schedule the node to visit it later and include it in the path
+                    # just doing path.append(next_vertex) will cause bug by changing the original path variable
+                    # scheduled will end up with copies full of the same thing
+                    # lists get passed by reference, so we need to make an explicit copy
+                    path_copy = list(path)
+                    path_copy.append(next_vertex)
+                    # add the new path to the list of possibilities in the scheduled stack
+                    scheduled.push(path_copy)
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
