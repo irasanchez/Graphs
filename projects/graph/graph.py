@@ -63,7 +63,24 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        # create a queue
+        scheduled = Stack()
+        # add the starting node to said queue
+        scheduled.push(starting_vertex)
+        # use a set for breadcrumbs
+        visited = set()
+        # while there are still vertices scheduled to be visited
+        while scheduled.size() > 0:
+            # remove the first item, since you're visiting it right now
+            current_vertex = scheduled.pop()
+            # if we have not visited this one yet
+            if current_vertex not in visited:
+                print(current_vertex)
+                visited.add(current_vertex)
+                # go through the neighbors
+                for next_vertex in self.get_neighbors(current_vertex):
+                    # schedule the node to visit it later
+                    scheduled.push(next_vertex)
 
     def dft_recursive(self, starting_vertex):
         """
@@ -168,4 +185,3 @@ if __name__ == '__main__':
     '''
     print(graph.dfs(1, 6))
     print(graph.dfs_recursive(1, 6))
-
