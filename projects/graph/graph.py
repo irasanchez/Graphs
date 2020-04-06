@@ -173,7 +173,7 @@ class Graph:
                     # add the new path to the list of possibilities in the scheduled stack
                     scheduled.push(path_copy)
 
-    def dfs_recursive(self, starting_vertex, destination_vertex, visited=None):
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=None, path=None):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -181,7 +181,29 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass
+        # recursion inherently uses a stack, so you can only dfs with it
+        # if we are just starting
+        if visited is None and path is None:
+            # create a set to collect the answer thus far
+            visited = set()
+            path = []
+        # add the starting vertex to the answer thus far
+        visited.add(starting_vertex)
+        path = path + [starting_vertex]
+
+        if starting_vertex == destination_vertex:
+            return path
+
+        for child_vertex in self.vertices[starting_vertex]:
+            print(child_vertex)
+            if child_vertex not in visited:
+                # build new path
+                new_path = self.dfs_recursive(
+                    child_vertex, destination_vertex, visited, path)
+                # make sure the destination_value even exists
+                if new_path:
+                    return new_path
+        return None
 
 
 if __name__ == '__main__':
