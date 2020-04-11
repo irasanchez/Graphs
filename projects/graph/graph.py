@@ -15,7 +15,10 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        self.vertices[vertex_id] = set()
+        print("adding")
+        if hasattr(self.vertices, f'vertex_id') is not True:
+            print("vertex is new")
+            self.vertices[vertex_id] = set()
 
     def add_edge(self, v1, v2):
         """
