@@ -1,7 +1,5 @@
 from graph import Graph
 
-import sys
-
 # Write a function that, given the dataset and the ID of an individual in the dataset, returns their earliest known ancestor – the one at the farthest distance from the input individual.
 
 # If there is more than one ancestor tied for "earliest", return the one with the lowest numeric ID.
@@ -33,6 +31,7 @@ def earliest_ancestor(ancestors, starting_node):
         path = family_tree.dft(starting_node)
         earliests_child = path[-2]
         lowest = path.pop()
+        # check to see if there is an alternative last parent whose value is lower
         for parent in family_tree.get_neighbors(earliests_child):
             if parent < lowest:
                 lowest = parent
