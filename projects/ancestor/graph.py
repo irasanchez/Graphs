@@ -67,21 +67,27 @@ class Graph:
         # create a stack
         scheduled = Stack()
         # add the starting node to said stack
-        scheduled.push(starting_vertex)
+        scheduled.push([starting_vertex])
         # use a set for breadcrumbs
         visited = set()
+        path = []
         # while there are still vertices scheduled to be visited
         while scheduled.size() > 0:
             # remove the first item, since you're visiting it right now
-            current_vertex = scheduled.pop()
+            path = scheduled.pop()
+            current_vertex = path[-1]
             # if we have not visited this one yet
             if current_vertex not in visited:
-                print(current_vertex)
                 visited.add(current_vertex)
                 # go through the neighbors
                 for next_vertex in self.get_neighbors(current_vertex):
                     # schedule the node to visit it later
-                    scheduled.push(next_vertex)
+                    path_copy = list(path)
+                    path_copy.append(next_vertex)
+                    # add the new path to the list of possibilities in the scheduled stack
+                    scheduled.push(path_copy)
+
+        return path
 
     def dft_recursive(self, starting_vertex, visited=None):
         """
@@ -145,6 +151,7 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
+        print("begin search")
         # create a stack
         scheduled = Stack()
         # add the starting node to said stack
@@ -159,7 +166,6 @@ class Graph:
             current_vertex = path[-1]
             # if we have not visited this one yet
             if current_vertex not in visited:
-                # check if the current one is the destination
                 if current_vertex == destination_vertex:
                     return path
                 visited.add(current_vertex)

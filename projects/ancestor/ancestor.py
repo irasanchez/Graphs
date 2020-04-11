@@ -17,8 +17,6 @@ import sys
 
 
 def earliest_ancestor(ancestors, starting_node):
-    print("\n\n", ancestors, "\n\n")
-
     # make a graph
     family_tree = Graph()
 
@@ -31,8 +29,11 @@ def earliest_ancestor(ancestors, starting_node):
     # If the input individual has no parents, the function should return -1.
     if not family_tree.vertices[starting_node]:
         return -1
-    # longest path - dfs
-
-
-earliest_ancestor([(1, 3), (2, 3), (3, 6), (5, 6), (5, 7),
-                   (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)], 2)
+    else:
+        path = family_tree.dft(starting_node)
+        earliests_child = path[-2]
+        lowest = path.pop()
+        for parent in family_tree.get_neighbors(earliests_child):
+            if parent < lowest:
+                lowest = parent
+        return lowest
