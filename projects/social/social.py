@@ -1,3 +1,7 @@
+import random
+from util import Stack, Queue
+
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -56,7 +60,7 @@ class SocialGraph:
         possible_friendships = []
         for user_id in self.users:
             for friend_id in range(user_id+1, self.last_id+1):
-                possible_friendships.append(user_id, friend_id)
+                possible_friendships.append((user_id, friend_id))
         random.shuffle(possible_friendships)
 
         # create n friendships where n = avg_friendships * num_users // 2
@@ -64,7 +68,13 @@ class SocialGraph:
         # total_friendships = avg_friendships * num_users
         for i in range(num_users * avg_friendships//2):
             friendship = possible_friendships[i]
-            self .add_friendship(friendship[0], friendship[1])
+            self.add_friendship(friendship[0], friendship[1])
+
+    def get_friends(self, user_id):
+        """
+        Get all friendships (edges) of a user.
+        """
+        return self.users[user_id]
 
     def get_all_social_paths(self, user_id):
         """
@@ -77,7 +87,33 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+
+        q = Queue()
+        q.enqueue([user_id])
+
+        while q.size() > 0:
+            path = q.dequeue()
+            current = path[-1]
+
+            if current not in visited:
+                visited[current] = path
+                for friend in self.friendships[current]:
+                    path_copy = list(path)
+                    path_copy.append(friend)
+                    q.enqueue(path_copy)
+
         return visited
+
+
+sgph = SocialGraph()
+# Creates 10 users with an average of 2 friends each
+sgph.populate_graph(10, 2)
+print(sgph.friendships)
+# {1: {8, 10, 5}, 2: {10, 5, 7}, 3: {4}, 4: {9, 3}, 5: {8, 1, 2}, 6: {10}, 7: {2}, 8: {1, 5}, 9: {4}, 10: {1, 2, 6}}
+sgph2 = SocialGraph()
+sgph2.populate_graph(10, 2)
+print(sgph2.friendships)
+# {1: {8}, 2: set(), 3: {6}, 4: {9, 5, 7}, 5: {9, 10, 4, 6}, 6: {8, 3, 5}, 7: {4}, 8: {1, 6}, 9: {10, 4, 5}, 10: {9, 5}}
 
 
 if __name__ == '__main__':
